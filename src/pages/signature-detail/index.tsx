@@ -9,10 +9,10 @@ const PATIENT_NAME = '张女士'
 const PATIENT_PHONE = '138****6789'
 
 const SignatureDetailPage: React.FC = () => {
-  const {
-    getAppointment, getTreatment, getQuestionsByAppointment,
-    getSignatureRecord
-  } = useConsentStore()
+  const storeAppointments = useConsentStore((s) => s.appointments)
+  const storeTreatments = useConsentStore((s) => s.treatments)
+  const storeQuestions = useConsentStore((s) => s.questions)
+  const storeSignatureRecords = useConsentStore((s) => s.signatureRecords)
 
   const [, setTick] = React.useState(0)
   useDidShow(() => { setTick((t) => t + 1) })
@@ -25,23 +25,23 @@ const SignatureDetailPage: React.FC = () => {
   const appointmentId = params.id || ''
 
   const appointment = useMemo(
-    () => getAppointment(appointmentId),
-    [appointmentId, getAppointment]
+    () => storeAppointments.find((a) => a.id === appointmentId),
+    [appointmentId, storeAppointments]
   )
 
   const treatment = useMemo(
-    () => (appointment ? getTreatment(appointment.treatmentId) : undefined),
-    [appointment, getTreatment]
+    () => (appointment ? storeTreatments.find((t) => t.id === appointment.treatmentId) : undefined),
+    [appointment, storeTreatments]
   )
 
   const questions = useMemo(
-    () => getQuestionsByAppointment(appointmentId),
-    [appointmentId, getQuestionsByAppointment]
+    () => storeQuestions.filter((q) => q.appointmentId === appointmentId),
+    [appointmentId, storeQuestions]
   )
 
   const signature = useMemo(
-    () => getSignatureRecord(appointmentId),
-    [appointmentId, getSignatureRecord]
+    () => storeSignatureRecords.find((r) => r.appointmentId === appointmentId),
+    [appointmentId, storeSignatureRecords]
   )
 
   if (!appointment || !treatment || !signature) {
@@ -57,9 +57,9 @@ const SignatureDetailPage: React.FC = () => {
 
   const patientName = signature.patientName || PATIENT_NAME
   const patientPhone = signature.patientPhone || PATIENT_PHONE
-  const doctorName = signature.doctorName || appointment.doctorName
-  const apptDate = signature.appointmentDate || appointment.date
-  const apptTime = signature.appointmentTime || appointment.time
+  const doctorName = signature.doctorName || appointment.doctorName || '-'
+  const apptDate = signature.appointmentDate || appointment.date || '-'
+  const apptTime = signature.appointmentTime || appointment.time || '-'
   const signatureSrc = signature.imageBase64 || signature.imageUrl || ''
 
   return (

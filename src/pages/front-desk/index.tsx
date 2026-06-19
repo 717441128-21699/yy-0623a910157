@@ -29,40 +29,51 @@ const classify = (status: ConsentStatus, pendingQCount: number): LedgerGroup => 
 }
 
 const FrontDeskPage: React.FC = () => {
-  const { getTodayAppointments, getQuestionsByAppointment, getSignatureRecord } = useConsentStore()
+  const storeAppointments = useConsentStore((s) => s.appointments)
+  const storeQuestions = useConsentStore((s) => s.questions)
+  const storeSignatureRecords = useConsentStore((s) => s.signatureRecords)
   const [, setTick] = useState(0)
 
   useDidShow(() => {
     setTick((t) => t + 1)
   })
 
+  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), [])
+
+  const todayAppointments = useMemo(
+    () => storeAppointments
+      .filter((apt) => apt.date === todayStr)
+      .sort((a, b) => a.time.localeCompare(b.time)),
+    [storeAppointments, todayStr]
+  )
+
   const groups = useMemo(() => {
-    const today = getTodayAppointments()
-    const buckets: Record<LedgerGroup, typeof today> = {
+    const buckets: Record<LedgerGroup, typeof todayAppointments> = {
       pending: [],
       ready: [],
       done: []
     }
-    for (const apt of today) {
-      const qs = getQuestionsByAppointment(apt.id)
-      const pendingCount = qs.filter((q) => q.status === 'pending').length
+    for (const apt of todayAppointments) {
+      const pendingCount = storeQuestions.filter(
+        (q) => q.appointmentId === apt.id && q.status === 'pending'
+      ).length
       buckets[classify(apt.consentStatus, pendingCount)].push(apt)
     }
     return buckets
-  }, [getTodayAppointments, getQuestionsByAppointment])
+  }, [todayAppointments, storeQuestions])
 
   const handleTap = useCallback((appointmentId: string) => {
     Taro.navigateTo({ url: `/pages/confirm/index?id=${appointmentId}` })
   }, [])
 
   const handleTapDetail = useCallback((appointmentId: string) => {
-    const record = getSignatureRecord(appointmentId)
+    const record = storeSignatureRecords.find((r) => r.appointmentId === appointmentId)
     if (record) {
       Taro.navigateTo({ url: `/pages/signature-detail/index?id=${appointmentId}` })
     } else {
       Taro.navigateTo({ url: `/pages/confirm/index?id=${appointmentId}` })
     }
-  }, [getSignatureRecord])
+  }, [storeSignatureRecords])
 
   const order: LedgerGroup[] = ['pending', 'ready', 'done']
   const totalCount = groups.pending.length + groups.ready.length + groups.done.length
@@ -101,8 +112,9 @@ const FrontDeskPage: React.FC = () => {
               </View>
             ) : (
               list.map((apt) => {
-                const qs = getQuestionsByAppointment(apt.id)
-                const pendingCount = qs.filter((q) => q.status === 'pending').length
+                const pendingCount = storeQuestions.filter(
+                  (q) => q.appointmentId === apt.id && q.status === 'pending'
+                ).length
                 const isSigned = apt.consentStatus === 'signed'
                 return (
                   <View
@@ -121,12 +133,6 @@ const FrontDeskPage: React.FC = () => {
                           <Text className={styles.itemSubText}>{apt.doctorName}</Text>
                           <Text className={styles.itemSubDot}>·</Text>
                           <Text className={styles.itemSubText}>张女士</Text>
-                          {apt.date && apt.date !== new Date().toISOString().slice(0, 10) && (
-                            <>
-                              <Text className={styles.itemSubDot}>·</Text>
-                              <Text className={styles.itemSubText}>{apt.date}</Text>
-                            </>
-                          )}
                         </View>
                         {pendingCount > 0 && (
                           <View className={styles.itemBadge}>

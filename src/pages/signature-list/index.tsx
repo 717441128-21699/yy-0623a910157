@@ -5,7 +5,9 @@ import { useConsentStore } from '@/store/useConsentStore'
 import styles from './index.module.scss'
 
 const SignatureListPage: React.FC = () => {
-  const { signatureRecords, getAppointment, getQuestionsByAppointment } = useConsentStore()
+  const signatureRecords = useConsentStore((s) => s.signatureRecords)
+  const storeAppointments = useConsentStore((s) => s.appointments)
+  const storeQuestions = useConsentStore((s) => s.questions)
   const [, setTick] = useState(0)
 
   useDidShow(() => {
@@ -14,24 +16,24 @@ const SignatureListPage: React.FC = () => {
 
   const enrichedRecords = useMemo(() => {
     return [...signatureRecords]
-      .sort((a, b) => (a.signedAt < b.signedAt ? 1 : -1))
+      .sort((a, b) => ((a.signedAt || '') < (b.signedAt || '') ? 1 : -1))
       .map((record) => {
-        const apt = getAppointment(record.appointmentId)
-        const questions = getQuestionsByAppointment(record.appointmentId)
+        const apt = storeAppointments.find((a) => a.id === record.appointmentId)
+        const questions = storeQuestions.filter((q) => q.appointmentId === record.appointmentId)
         const thumb = record.imageBase64 || record.imageUrl || ''
         return {
           record,
           thumb,
-          patientName: record.patientName || apt?.patientName || '张女士',
-          patientPhone: record.patientPhone || apt?.patientPhone || '138****6789',
+          patientName: record.patientName || '张女士',
+          patientPhone: record.patientPhone || '138****6789',
           doctorName: record.doctorName || apt?.doctorName || '-',
           date: record.appointmentDate || apt?.date || '-',
           time: record.appointmentTime || apt?.time || '-',
           questionCount: questions.length,
-          frontDeskNote: record.frontDeskNote
+          frontDeskNote: record.frontDeskNote || ''
         }
       })
-  }, [signatureRecords, getAppointment, getQuestionsByAppointment])
+  }, [signatureRecords, storeAppointments, storeQuestions])
 
   const handleTapRecord = useCallback((appointmentId: string) => {
     Taro.navigateTo({ url: `/pages/signature-detail/index?id=${appointmentId}` })

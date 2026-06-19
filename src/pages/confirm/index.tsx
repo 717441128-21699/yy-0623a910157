@@ -23,11 +23,14 @@ const ConfirmPage: React.FC = () => {
   const [frontDeskNote, setFrontDeskNote] = useState('')
   const [, setTick] = useState(0)
 
-  const {
-    getAppointment, getTreatment, getQuestionsByAppointment,
-    addSignatureRecord, updateConsentStatus, answerQuestion,
-    getSignatureRecord
-  } = useConsentStore()
+  const storeQuestions = useConsentStore((s) => s.questions)
+  const storeAppointments = useConsentStore((s) => s.appointments)
+  const storeSignatureRecords = useConsentStore((s) => s.signatureRecords)
+  const treatments = useConsentStore((s) => s.treatments)
+
+  const addSignatureRecord = useConsentStore((s) => s.addSignatureRecord)
+  const updateConsentStatus = useConsentStore((s) => s.updateConsentStatus)
+  const answerQuestion = useConsentStore((s) => s.answerQuestion)
 
   useDidShow(() => {
     setTick((t) => t + 1)
@@ -41,18 +44,18 @@ const ConfirmPage: React.FC = () => {
   const appointmentId = params.id || ''
 
   const appointment = useMemo(
-    () => getAppointment(appointmentId),
-    [appointmentId, getAppointment]
+    () => storeAppointments.find((a) => a.id === appointmentId),
+    [appointmentId, storeAppointments]
   )
 
   const treatment = useMemo(
-    () => (appointment ? getTreatment(appointment.treatmentId) : undefined),
-    [appointment, getTreatment]
+    () => (appointment ? treatments.find((t) => t.id === appointment.treatmentId) : undefined),
+    [appointment, treatments]
   )
 
   const questions = useMemo(
-    () => getQuestionsByAppointment(appointmentId),
-    [appointmentId, getQuestionsByAppointment]
+    () => storeQuestions.filter((q) => q.appointmentId === appointmentId),
+    [appointmentId, storeQuestions]
   )
 
   const pendingQuestions = useMemo(
@@ -61,8 +64,8 @@ const ConfirmPage: React.FC = () => {
   )
 
   const currentSignature = useMemo(
-    () => getSignatureRecord(appointmentId),
-    [appointmentId, getSignatureRecord]
+    () => storeSignatureRecords.find((r) => r.appointmentId === appointmentId),
+    [appointmentId, storeSignatureRecords]
   )
 
   const hasPendingQuestions = pendingQuestions.length > 0
