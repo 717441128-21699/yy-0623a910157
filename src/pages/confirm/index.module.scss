@@ -1,0 +1,245 @@
+@use '@/styles/variables.scss' as *;
+
+.confirmPage {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(78, 163, 160, 0.08) 0%, $color-bg-page 100%);
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 180rpx;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+}
+
+.title {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.subtitle {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.appointmentCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-xl;
+  box-shadow: $shadow-card;
+}
+
+.appointmentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.treatmentName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.appointmentInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.appointmentInfoText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.sectionLabel {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.statusCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.statusLabel {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.statusValue {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+}
+
+.statusDone {
+  background-color: $color-done-bg;
+}
+
+.statusDoneText {
+  font-size: $font-size-xs;
+  color: $color-done-text;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background-color: $color-pending-bg;
+}
+
+.statusPendingText {
+  font-size: $font-size-xs;
+  color: $color-pending-text;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.questionCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.questionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.questionCategory {
+  display: inline-flex;
+  align-items: center;
+  background-color: $color-tag-bg;
+  border-radius: $radius-sm;
+  padding: 4rpx 14rpx;
+}
+
+.questionCategoryText {
+  font-size: $font-size-xs;
+  color: $color-tag-text;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.questionContent {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+  margin-bottom: $spacing-sm;
+}
+
+.questionAnswer {
+  background-color: $color-done-bg;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.answerLabel {
+  font-size: $font-size-xs;
+  color: $color-done-text;
+  font-weight: $font-weight-medium;
+  margin-bottom: 8rpx;
+}
+
+.answerText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}
+
+.noQuestionTip {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noQuestionText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.signatureSection {
+  margin-top: $spacing-xl;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-bg-card;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+  box-shadow: $shadow-float;
+}
+
+.signBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  border: none;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.signBtnDisabled {
+  opacity: 0.5;
+}
+
+.signBtnText {
+  font-size: $font-size-lg;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+}
+
+.signedBanner {
+  background-color: $color-done-bg;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-xl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signedText {
+  font-size: $font-size-lg;
+  color: $color-done-text;
+  font-weight: $font-weight-semibold;
+}

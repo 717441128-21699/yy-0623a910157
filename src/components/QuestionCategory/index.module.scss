@@ -1,0 +1,43 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  border-radius: $radius-round;
+  background-color: $color-bg-card;
+  border: 2rpx solid $color-border;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.96);
+  }
+}
+
+.chipActive {
+  background-color: $color-tag-bg;
+  border-color: $color-primary;
+}
+
+.chipIcon {
+  font-size: $font-size-md;
+  margin-right: 8rpx;
+}
+
+.chipText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.chipTextActive {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}

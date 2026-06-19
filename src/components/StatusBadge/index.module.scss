@@ -1,0 +1,43 @@
+@use '@/styles/variables.scss' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  white-space: nowrap;
+}
+
+.text {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.unread {
+  background-color: $color-pending-bg;
+  .text {
+    color: $color-pending-text;
+  }
+}
+
+.read {
+  background-color: $color-tag-bg;
+  .text {
+    color: $color-tag-text;
+  }
+}
+
+.confirmed {
+  background-color: $color-question-bg;
+  .text {
+    color: $color-question-text;
+  }
+}
+
+.signed {
+  background-color: $color-done-bg;
+  .text {
+    color: $color-done-text;
+  }
+}

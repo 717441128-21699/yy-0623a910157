@@ -1,0 +1,76 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.92;
+    transform: scale(0.98);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.treatmentName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex: 1;
+  @include text-ellipsis;
+  margin-right: $spacing-sm;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.infoText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.dot {
+  font-size: $font-size-sm;
+  color: $color-text-disabled;
+  margin: 0 8rpx;
+}
+
+.questionTip {
+  display: inline-flex;
+  align-items: center;
+  background-color: $color-pending-bg;
+  border-radius: $radius-sm;
+  padding: 6rpx 16rpx;
+  margin-top: $spacing-xs;
+  margin-bottom: $spacing-xs;
+}
+
+.questionTipText {
+  font-size: $font-size-xs;
+  color: $color-pending-text;
+  font-weight: $font-weight-medium;
+}
+
+.actionHint {
+  margin-top: $spacing-sm;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.actionHintText {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}

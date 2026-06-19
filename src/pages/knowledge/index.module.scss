@@ -1,0 +1,111 @@
+@use '@/styles/variables.scss' as *;
+
+.knowledgePage {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(78, 163, 160, 0.08) 0%, $color-bg-page 100%);
+  padding: $spacing-lg $page-padding;
+  padding-bottom: 160rpx;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+}
+
+.title {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.subtitle {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  background-color: $color-bg-card;
+  border-radius: $radius-round;
+  padding: 0 $spacing-lg;
+  height: 80rpx;
+  margin-bottom: $spacing-xl;
+  box-shadow: $shadow-card;
+}
+
+.searchPlaceholder {
+  font-size: $font-size-md;
+  color: $color-text-disabled;
+}
+
+.card {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.92;
+    transform: scale(0.98);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.categoryTag {
+  display: inline-flex;
+  align-items: center;
+  background-color: $color-tag-bg;
+  border-radius: $radius-sm;
+  padding: 4rpx 14rpx;
+  margin-right: $spacing-sm;
+}
+
+.categoryTagText {
+  font-size: $font-size-xs;
+  color: $color-tag-text;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.cardSummary {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: $line-height-loose;
+  @include text-ellipsis-multi(2);
+}
+
+.tagRow {
+  display: flex;
+  gap: 8rpx;
+  margin-top: $spacing-sm;
+}
+
+.miniTag {
+  display: inline-flex;
+  align-items: center;
+  background-color: $color-bg-hover;
+  border-radius: $radius-xs;
+  padding: 2rpx 10rpx;
+}
+
+.miniTagText {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  white-space: nowrap;
+}
