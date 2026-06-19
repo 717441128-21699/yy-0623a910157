@@ -11,8 +11,8 @@ interface AppointmentCardProps {
 }
 
 const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, onTapConsent, onTapConfirm }) => {
-  const isRead = appointment.consentStatus === 'read' || appointment.consentStatus === 'confirmed'
   const isSigned = appointment.consentStatus === 'signed'
+  const isUnread = appointment.consentStatus === 'unread'
 
   return (
     <View className={styles.card}>
@@ -37,18 +37,16 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, onTapCon
         )}
         <View className={styles.actionHint}>
           <Text className={styles.actionHintText}>
-            {appointment.consentStatus === 'unread' ? '点击阅读知情同意书' : '查看知情同意书'}
+            {isUnread ? '点击阅读知情同意书' : '查看知情同意书'}
           </Text>
         </View>
       </View>
 
-      {(isRead || isSigned) && (
-        <View className={styles.confirmEntry} onClick={() => onTapConfirm(appointment.id)}>
-          <Text className={styles.confirmEntryText}>
-            {isSigned ? '✅ 已签名，查看确认记录' : '🏥 到院确认签名'}
-          </Text>
-        </View>
-      )}
+      <View className={styles.confirmEntry} onClick={() => onTapConfirm(appointment.id)}>
+        <Text className={styles.confirmEntryText}>
+          {isSigned ? '✅ 已签名 · 查看到院确认单' : '🏥 到院确认'}
+        </Text>
+      </View>
     </View>
   )
 }

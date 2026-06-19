@@ -23,6 +23,12 @@
   color: $color-text-tertiary;
 }
 
+.dot {
+  font-size: $font-size-sm;
+  color: $color-text-disabled;
+  margin: 0 8rpx;
+}
+
 .appointmentCard {
   background-color: $color-bg-card;
   border-radius: $radius-lg;
@@ -42,12 +48,12 @@
   font-size: $font-size-xl;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
+  margin-right: $spacing-sm;
 }
 
 .appointmentInfo {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
 }
 
 .appointmentInfoText {
@@ -62,7 +68,8 @@
   margin-bottom: $spacing-md;
 }
 
-.statusCard {
+/* ===== 到院确认单 ===== */
+.confirmSheet {
   background-color: $color-bg-card;
   border-radius: $radius-lg;
   padding: $spacing-lg;
@@ -70,9 +77,9 @@
   box-shadow: $shadow-card;
 }
 
-.statusItem {
+.sheetRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: $spacing-sm 0;
   border-bottom: 1rpx solid $color-divider;
@@ -82,41 +89,164 @@
   }
 }
 
-.statusLabel {
+.sheetLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.sheetValue {
   font-size: $font-size-md;
-  color: $color-text-secondary;
+  color: $color-text-primary;
+  text-align: right;
+  flex: 1;
+  word-break: break-all;
 }
 
-.statusValue {
-  display: inline-flex;
-  align-items: center;
-  padding: 4rpx 16rpx;
-  border-radius: $radius-sm;
-}
-
-.statusDone {
-  background-color: $color-done-bg;
-}
-
-.statusDoneText {
-  font-size: $font-size-xs;
+.sheetSuccess {
   color: $color-done-text;
   font-weight: $font-weight-medium;
-  white-space: nowrap;
 }
 
-.statusPending {
-  background-color: $color-pending-bg;
+.sheetQuestionBlock {
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  background-color: #F9FBFB;
+  border-radius: $radius-md;
 }
 
-.statusPendingText {
-  font-size: $font-size-xs;
-  color: $color-pending-text;
+.sheetQuestionTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.sheetQuestionItem {
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.sheetQuestionMeta {
+  margin-bottom: 8rpx;
+}
+
+.sheetQuestionCategory {
+  display: inline-flex;
+  align-items: center;
+  background-color: $color-tag-bg;
+  border-radius: $radius-xs;
+  padding: 2rpx 12rpx;
+  font-size: 20rpx;
+  color: $color-tag-text;
   font-weight: $font-weight-medium;
-  white-space: nowrap;
 }
 
-.questionCard {
+.sheetQuestionText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  margin-bottom: 8rpx;
+}
+
+.sheetAnswerText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.sheetSignatureBlock {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx dashed $color-border;
+}
+
+.sheetSignatureImageBox {
+  width: 100%;
+  height: 200rpx;
+  background-color: #FAFBFC;
+  border-radius: $radius-md;
+  margin: $spacing-sm 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheetSignatureImage {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== 核对流程步骤条 ===== */
+.verifyStepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg $spacing-md;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  opacity: 0.5;
+  transition: all $transition-fast;
+}
+
+.stepActive {
+  opacity: 1;
+}
+
+.stepNum {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background-color: $color-bg-hover;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepActive .stepNum {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+}
+
+.stepLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.stepActive .stepLabel {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.stepLine {
+  width: 80rpx;
+  height: 2rpx;
+  background-color: $color-border;
+  margin: 0 $spacing-sm;
+  margin-bottom: 32rpx;
+}
+
+/* ===== 核对卡片 ===== */
+.verifyCard {
   background-color: $color-bg-card;
   border-radius: $radius-lg;
   padding: $spacing-lg;
@@ -124,23 +254,176 @@
   box-shadow: $shadow-card;
 }
 
+.verifyTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+/* 身份核对 */
+.patientInfoBox {
+  background-color: #F9FBFB;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.patientInfoRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs 0;
+}
+
+.patientInfoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.patientInfoValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+/* 通用勾选行 */
+.checkRow {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-sm 0;
+  margin-bottom: $spacing-lg;
+}
+
+.checkRowChecked .checkLabel {
+  color: $color-primary;
+}
+
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: $radius-xs;
+  border: 2rpx solid $color-border;
+  margin-right: $spacing-sm;
+  margin-top: 2rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-fast;
+}
+
+.checkboxChecked {
+  background-color: $color-primary;
+  border-color: $color-primary;
+}
+
+.checkMark {
+  font-size: 22rpx;
+  color: $color-text-white;
+}
+
+.checkLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+/* 项目核对 */
+.treatmentCheckCard {
+  background: linear-gradient(135deg, rgba(78, 163, 160, 0.08) 0%, rgba(108, 191, 187, 0.08) 100%);
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.treatmentCheckName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: 8rpx;
+}
+
+.treatmentCheckSub {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.consentWarn {
+  background-color: #FFF7E6;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.consentWarnText {
+  font-size: $font-size-sm;
+  color: $color-pending-text;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-sm;
+}
+
+.consentWarnBtn {
+  @include button-reset;
+  display: inline-flex;
+  height: $button-height-sm;
+  padding: 0 $spacing-lg;
+  background-color: $color-primary;
+  border-radius: $radius-button;
+  border: none;
+  align-self: flex-start;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.consentWarnBtnText {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.consentOk {
+  background-color: $color-done-bg;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.consentOkText {
+  font-size: $font-size-sm;
+  color: $color-done-text;
+  font-weight: $font-weight-medium;
+}
+
+/* 疑问处理 */
+.questionCard {
+  background-color: #F9FBFB;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
 .questionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
 }
 
 .questionCategory {
   display: inline-flex;
   align-items: center;
   background-color: $color-tag-bg;
-  border-radius: $radius-sm;
-  padding: 4rpx 14rpx;
+  border-radius: $radius-xs;
+  padding: 4rpx 12rpx;
 }
 
 .questionCategoryText {
-  font-size: $font-size-xs;
+  font-size: 20rpx;
   color: $color-tag-text;
   font-weight: $font-weight-medium;
   white-space: nowrap;
@@ -149,8 +432,8 @@
 .statusTag {
   display: inline-flex;
   align-items: center;
-  padding: 4rpx 14rpx;
-  border-radius: $radius-sm;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
 }
 
 .tagAnswered {
@@ -158,8 +441,9 @@
 }
 
 .tagAnsweredText {
-  font-size: $font-size-xs;
+  font-size: 20rpx;
   color: $color-done-text;
+  font-weight: $font-weight-medium;
   white-space: nowrap;
 }
 
@@ -168,54 +452,56 @@
 }
 
 .tagPendingText {
-  font-size: $font-size-xs;
+  font-size: 20rpx;
   color: $color-pending-text;
+  font-weight: $font-weight-medium;
   white-space: nowrap;
 }
 
 .questionContent {
-  font-size: $font-size-md;
+  font-size: $font-size-sm;
   color: $color-text-primary;
-  line-height: $line-height-loose;
-  margin-bottom: $spacing-sm;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-xs;
 }
 
 .answerBox {
   background-color: $color-done-bg;
-  border-radius: $radius-md;
-  padding: $spacing-md;
-  margin-top: $spacing-sm;
+  border-radius: $radius-sm;
+  padding: $spacing-sm;
+  margin-top: $spacing-xs;
 }
 
 .answerLabel {
   font-size: $font-size-xs;
   color: $color-done-text;
   font-weight: $font-weight-medium;
-  margin-bottom: 8rpx;
+  margin-bottom: 4rpx;
 }
 
 .answerText {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
-  line-height: $line-height-loose;
+  line-height: $line-height-normal;
 }
 
 .replyArea {
-  margin-top: $spacing-sm;
-  background-color: #FAFBFC;
-  border-radius: $radius-md;
-  padding: $spacing-md;
+  margin-top: $spacing-xs;
+  background-color: #FFFFFF;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-sm;
+  padding: $spacing-sm;
 }
 
 .replyInput {
   width: 100%;
-  min-height: 120rpx;
+  min-height: 100rpx;
   font-size: $font-size-sm;
   color: $color-text-primary;
   line-height: $line-height-normal;
   background-color: transparent;
   border: none;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
 }
 
 .replyPlaceholder {
@@ -230,7 +516,7 @@
 .markBtn {
   @include button-reset;
   height: $button-height-sm;
-  padding: 0 $spacing-xl;
+  padding: 0 $spacing-lg;
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
   border-radius: $radius-button;
   border: none;
@@ -242,46 +528,105 @@
 }
 
 .markBtnText {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-white;
   font-weight: $font-weight-medium;
   white-space: nowrap;
 }
 
-.noQuestionTip {
-  background-color: $color-bg-card;
-  border-radius: $radius-lg;
-  padding: $spacing-xl;
+.noQuestionTip2 {
+  background-color: #F9FBFB;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
   margin-bottom: $spacing-md;
-  box-shadow: $shadow-card;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.noQuestionText {
-  font-size: $font-size-md;
+.noQuestionText2 {
+  font-size: $font-size-sm;
   color: $color-text-tertiary;
 }
 
-.signatureResultCard {
-  background-color: $color-bg-card;
-  border-radius: $radius-lg;
+/* 完成核对提示 */
+.verifyDone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: $spacing-lg;
-  margin-bottom: $spacing-md;
-  box-shadow: $shadow-card;
 }
 
-.signatureImageRow {
+.verifyDoneIcon {
+  font-size: 80rpx;
   margin-bottom: $spacing-sm;
 }
 
-.signatureLabel {
-  font-size: $font-size-md;
-  font-weight: $font-weight-medium;
-  color: $color-text-primary;
+.verifyDoneTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: $spacing-xs;
 }
 
+.verifyDoneSub {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+/* 按钮行 */
+.verifyBtnRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.prevBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  background-color: $color-bg-hover;
+  border-radius: $radius-button;
+  border: none;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.prevBtnText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.nextBtn {
+  @include button-reset;
+  flex: 2;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  border: none;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.nextBtnDisabled {
+  opacity: 0.5;
+}
+
+.nextBtnText {
+  font-size: $font-size-md;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+}
+
+/* 兼容之前的签名预览样式 */
 .signaturePreview {
   background-color: #FAFBFC;
   border: 2rpx dashed $color-border;
@@ -290,28 +635,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: $spacing-sm;
+  margin: $spacing-sm 0;
 }
 
 .signaturePreviewText {
-  font-size: $font-size-lg;
+  font-size: $font-size-md;
   color: $color-primary;
   font-weight: $font-weight-medium;
 }
 
-.signatureMeta {
-  margin-top: $spacing-xs;
-}
-
-.signatureMetaText {
-  font-size: $font-size-sm;
-  color: $color-text-tertiary;
-}
-
 .signatureSection {
-  margin-top: $spacing-xl;
+  margin-top: $spacing-md;
 }
 
+/* 底部栏 */
 .bottomBar {
   position: fixed;
   bottom: 0;
@@ -321,6 +658,18 @@
   padding: $spacing-lg $page-padding;
   padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
   box-shadow: $shadow-float;
+}
+
+.bottomTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-sm;
+}
+
+.bottomTipText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
 }
 
 .signBtn {

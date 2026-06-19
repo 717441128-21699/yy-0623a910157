@@ -1,13 +1,30 @@
-import React from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { View, Text } from '@tarojs/components'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { useConsentStore } from '@/store/useConsentStore'
 import styles from './index.module.scss'
 
 const MinePage: React.FC = () => {
   const { appointments, signatureRecords, questions } = useConsentStore()
+  const [, setTick] = useState(0)
 
-  const signedCount = appointments.filter((a) => a.consentStatus === 'signed').length
-  const pendingQuestionCount = questions.filter((q) => q.status === 'pending').length
+  useDidShow(() => {
+    setTick((t) => t + 1)
+  })
+
+  const signedCount = useMemo(
+    () => appointments.filter((a) => a.consentStatus === 'signed').length,
+    [appointments]
+  )
+
+  const pendingQuestionCount = useMemo(
+    () => questions.filter((q) => q.status === 'pending').length,
+    [questions]
+  )
+
+  const gotoSignatureList = useCallback(() => {
+    Taro.navigateTo({ url: '/pages/signature-list/index' })
+  }, [])
 
   return (
     <View className={styles.minePage}>
@@ -37,7 +54,7 @@ const MinePage: React.FC = () => {
 
         <Text className={styles.sectionTitle}>功能</Text>
         <View className={styles.menuCard}>
-          <View className={styles.menuItem}>
+          <View className={styles.menuItem} onClick={gotoSignatureList}>
             <View className={styles.menuLeft}>
               <Text className={styles.menuIcon}>📋</Text>
               <Text className={styles.menuLabel}>签名记录</Text>

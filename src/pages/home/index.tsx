@@ -1,12 +1,17 @@
-import React, { useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { View, Text } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import AppointmentCard from '@/components/AppointmentCard'
 import { useConsentStore } from '@/store/useConsentStore'
 import styles from './index.module.scss'
 
 const HomePage: React.FC = () => {
   const { appointments } = useConsentStore()
+  const [, setTick] = useState(0)
+
+  useDidShow(() => {
+    setTick((t) => t + 1)
+  })
 
   const pendingCount = useMemo(
     () => appointments.filter((a) => a.consentStatus !== 'signed').length,
@@ -18,13 +23,13 @@ const HomePage: React.FC = () => {
     [appointments]
   )
 
-  const handleTapConsent = (id: string) => {
+  const handleTapConsent = useCallback((id: string) => {
     Taro.navigateTo({ url: `/pages/consent/index?id=${id}` })
-  }
+  }, [])
 
-  const handleTapConfirm = (id: string) => {
+  const handleTapConfirm = useCallback((id: string) => {
     Taro.navigateTo({ url: `/pages/confirm/index?id=${id}` })
-  }
+  }, [])
 
   return (
     <View className={styles.homePage}>

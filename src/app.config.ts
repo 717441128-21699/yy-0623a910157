@@ -5,7 +5,9 @@ export default defineAppConfig({
     'pages/mine/index',
     'pages/consent/index',
     'pages/question/index',
-    'pages/confirm/index'
+    'pages/confirm/index',
+    'pages/signature-list/index',
+    'pages/signature-detail/index'
   ],
   window: {
     backgroundTextStyle: 'light',
