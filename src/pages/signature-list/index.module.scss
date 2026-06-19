@@ -30,11 +30,23 @@
   margin-bottom: $spacing-md;
   box-shadow: $shadow-card;
   transition: all $transition-base;
+  border: 2rpx solid rgba(78, 163, 160, 0.08);
 
   &:active {
     opacity: 0.92;
     transform: scale(0.98);
   }
+}
+
+.recordMain {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-sm;
+}
+
+.recordInfo {
+  flex: 1;
+  min-width: 0;
 }
 
 .recordTop {
@@ -69,17 +81,55 @@
   white-space: nowrap;
 }
 
-.recordInfo {
+.recordInfoRow {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8rpx $spacing-sm;
-  margin-bottom: $spacing-sm;
+  align-items: flex-start;
+  padding: 4rpx 0;
 }
 
-.recordInfoText {
-  font-size: $font-size-sm;
+.recordInfoLabel {
+  font-size: $font-size-xs;
   color: $color-text-tertiary;
+  width: 60rpx;
+  flex-shrink: 0;
+}
+
+.recordInfoValue {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  flex: 1;
+  word-break: break-all;
+}
+
+.recordThumb {
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #FAFBFC;
+  border: 1rpx dashed $color-border;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbImage {
+  width: 100%;
+  height: 100%;
+}
+
+.thumbFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.thumbFallbackText {
+  font-size: 48rpx;
+  color: $color-text-disabled;
 }
 
 .recordMeta {
@@ -96,8 +146,9 @@
 }
 
 .recordArrow {
-  font-size: $font-size-md;
-  color: $color-text-disabled;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
 }
 
 .emptyTip {
@@ -115,5 +166,12 @@
 
 .emptyText {
   font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-xs;
+}
+
+.emptySub {
+  font-size: $font-size-sm;
   color: $color-text-tertiary;
 }

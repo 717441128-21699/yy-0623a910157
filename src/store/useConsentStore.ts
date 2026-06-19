@@ -118,5 +118,16 @@ export const useConsentStore = create<ConsentStore>((set, get) => ({
 
   getQuestionsByAppointment: (appointmentId: string) => {
     return get().questions.filter((q) => q.appointmentId === appointmentId)
+  },
+
+  getSignatureRecord: (appointmentId: string) => {
+    return get().signatureRecords.find((r) => r.appointmentId === appointmentId)
+  },
+
+  getTodayAppointments: () => {
+    const today = new Date().toISOString().slice(0, 10)
+    return get().appointments
+      .filter((apt) => apt.date >= today)
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
   }
 }))

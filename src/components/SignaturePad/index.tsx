@@ -4,7 +4,7 @@ import Taro from '@tarojs/taro'
 import styles from './index.module.scss'
 
 interface SignaturePadProps {
-  onComplete: (signatureData: string) => void
+  onComplete: (payload: { imageUrl: string; imageBase64: string }) => void
   onClear?: () => void
 }
 
@@ -59,11 +59,28 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ onComplete, onClear }) => {
       canvasId,
       success: (res) => {
         console.info('[SignaturePad] signature completed, tempFilePath:', res.tempFilePath)
-        onComplete(res.tempFilePath)
+        let imageBase64 = ''
+        try {
+          const fs = Taro.getFileSystemManager()
+          const data = fs.readFileSync(res.tempFilePath, 'base64')
+          imageBase64 = typeof data === 'string' ? data : ''
+          if (imageBase64) {
+            imageBase64 = 'data:image/png;base64,' + imageBase64
+          }
+        } catch (err) {
+          console.warn('[SignaturePad] readFileSync to base64 failed, fallback to tempPath', err)
+        }
+        onComplete({
+          imageUrl: res.tempFilePath,
+          imageBase64
+        })
       },
       fail: (err) => {
         console.error('[SignaturePad] canvasToTempFilePath failed', err)
-        onComplete('signature_data_' + Date.now())
+        onComplete({
+          imageUrl: 'signature_data_' + Date.now(),
+          imageBase64: ''
+        })
       }
     })
   }, [hasDrawn, onComplete])

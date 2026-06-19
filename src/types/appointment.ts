@@ -46,8 +46,15 @@ export interface SignatureRecord {
   id: string
   appointmentId: string
   treatmentName: string
+  patientName: string
+  patientPhone: string
+  doctorName: string
+  appointmentDate: string
+  appointmentTime: string
   signedAt: string
   imageUrl: string
+  imageBase64: string
+  frontDeskNote: string
 }
 
 export const QUESTION_CATEGORY_MAP: Record<QuestionCategory, string> = {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { View, Text, Image } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { useConsentStore } from '@/store/useConsentStore'
 import { QUESTION_CATEGORY_MAP } from '@/types/appointment'
 import styles from './index.module.scss'
@@ -9,7 +9,13 @@ const PATIENT_NAME = '张女士'
 const PATIENT_PHONE = '138****6789'
 
 const SignatureDetailPage: React.FC = () => {
-  const { getAppointment, getTreatment, getQuestionsByAppointment, signatureRecords } = useConsentStore()
+  const {
+    getAppointment, getTreatment, getQuestionsByAppointment,
+    getSignatureRecord
+  } = useConsentStore()
+
+  const [, setTick] = React.useState(0)
+  useDidShow(() => { setTick((t) => t + 1) })
 
   const params = useMemo(() => {
     const instance = Taro.getCurrentInstance()
@@ -34,8 +40,8 @@ const SignatureDetailPage: React.FC = () => {
   )
 
   const signature = useMemo(
-    () => signatureRecords.find((r) => r.appointmentId === appointmentId),
-    [appointmentId, signatureRecords]
+    () => getSignatureRecord(appointmentId),
+    [appointmentId, getSignatureRecord]
   )
 
   if (!appointment || !treatment || !signature) {
@@ -49,12 +55,19 @@ const SignatureDetailPage: React.FC = () => {
     )
   }
 
+  const patientName = signature.patientName || PATIENT_NAME
+  const patientPhone = signature.patientPhone || PATIENT_PHONE
+  const doctorName = signature.doctorName || appointment.doctorName
+  const apptDate = signature.appointmentDate || appointment.date
+  const apptTime = signature.appointmentTime || appointment.time
+  const signatureSrc = signature.imageBase64 || signature.imageUrl || ''
+
   return (
     <View className={styles.page}>
       <View className={styles.banner}>
         <Text className={styles.bannerTitle}>{treatment.name}</Text>
         <Text className={styles.bannerSub}>
-          {appointment.doctorName} · {appointment.date} {appointment.time} · 到院确认已完成
+          {doctorName} · {apptDate} {apptTime} · 到院确认已完成
         </Text>
       </View>
 
@@ -62,11 +75,11 @@ const SignatureDetailPage: React.FC = () => {
       <View className={styles.sheet}>
         <View className={styles.sheetRow}>
           <Text className={styles.sheetLabel}>患者姓名</Text>
-          <Text className={styles.sheetValue}>{PATIENT_NAME}</Text>
+          <Text className={styles.sheetValue}>{patientName}</Text>
         </View>
         <View className={styles.sheetRow}>
           <Text className={styles.sheetLabel}>联系电话</Text>
-          <Text className={styles.sheetValue}>{PATIENT_PHONE}</Text>
+          <Text className={styles.sheetValue}>{patientPhone}</Text>
         </View>
         <View className={styles.sheetRow}>
           <Text className={styles.sheetLabel}>治疗项目</Text>
@@ -74,11 +87,11 @@ const SignatureDetailPage: React.FC = () => {
         </View>
         <View className={styles.sheetRow}>
           <Text className={styles.sheetLabel}>就诊医生</Text>
-          <Text className={styles.sheetValue}>{appointment.doctorName}</Text>
+          <Text className={styles.sheetValue}>{doctorName}</Text>
         </View>
         <View className={styles.sheetRow}>
           <Text className={styles.sheetLabel}>预约时间</Text>
-          <Text className={styles.sheetValue}>{appointment.date} {appointment.time}</Text>
+          <Text className={styles.sheetValue}>{apptDate} {apptTime}</Text>
         </View>
         <View className={styles.sheetRow}>
           <Text className={styles.sheetLabel}>同意书阅读</Text>
@@ -108,13 +121,20 @@ const SignatureDetailPage: React.FC = () => {
           </View>
         )}
 
+        {signature.frontDeskNote && (
+          <View className={styles.sheetNoteBlock}>
+            <Text className={styles.sheetNoteLabel}>前台备注</Text>
+            <Text className={styles.sheetNoteText}>{signature.frontDeskNote}</Text>
+          </View>
+        )}
+
         <View className={styles.sheetSignatureBlock}>
           <Text className={styles.sheetSignatureLabel}>患者签名</Text>
-          {signature.imageUrl ? (
+          {signatureSrc ? (
             <View className={styles.sheetSignatureImageBox}>
               <Image
                 className={styles.sheetSignatureImage}
-                src={signature.imageUrl}
+                src={signatureSrc}
                 mode="aspectFit"
               />
             </View>

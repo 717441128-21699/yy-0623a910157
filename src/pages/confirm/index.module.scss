@@ -156,6 +156,26 @@
 }
 
 .sheetAnswerText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.sheetNoteBlock {
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  background-color: #FFF9E6;
+  border-radius: $radius-md;
+}
+
+.sheetNoteLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: #B07800;
+  margin-bottom: 8rpx;
+}
+
+.sheetNoteText {
   font-size: $font-size-sm;
   color: $color-text-secondary;
   line-height: $line-height-normal;
@@ -573,6 +593,33 @@
 .verifyDoneSub {
   font-size: $font-size-sm;
   color: $color-text-tertiary;
+}
+
+/* 前台备注 */
+.noteSection {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.noteLabel {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.noteInput {
+  width: 100%;
+  min-height: 140rpx;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  background-color: #F9FBFB;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-sm;
+  padding: $spacing-sm;
 }
 
 /* 按钮行 */

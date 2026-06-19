@@ -9,7 +9,9 @@ export interface ConsentStore {
   addQuestion: (question: PatientQuestion) => void
   answerQuestion: (questionId: string, answer: string) => void
   addSignatureRecord: (record: SignatureRecord) => void
+  getSignatureRecord: (appointmentId: string) => SignatureRecord | undefined
   getAppointment: (id: string) => Appointment | undefined
   getTreatment: (id: string) => TreatmentItem | undefined
   getQuestionsByAppointment: (appointmentId: string) => PatientQuestion[]
+  getTodayAppointments: () => Appointment[]
 }

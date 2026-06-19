@@ -26,6 +26,10 @@ const MinePage: React.FC = () => {
     Taro.navigateTo({ url: '/pages/signature-list/index' })
   }, [])
 
+  const gotoFrontDesk = useCallback(() => {
+    Taro.navigateTo({ url: '/pages/front-desk/index' })
+  }, [])
+
   return (
     <View className={styles.minePage}>
       <View className={styles.profileHeader}>
@@ -52,15 +56,26 @@ const MinePage: React.FC = () => {
           </View>
         </View>
 
-        <Text className={styles.sectionTitle}>功能</Text>
+        <Text className={styles.sectionTitle}>前台工作台</Text>
         <View className={styles.menuCard}>
-          <View className={styles.menuItem} onClick={gotoSignatureList}>
+          <View className={styles.menuItem} onClick={gotoFrontDesk}>
             <View className={styles.menuLeft}>
-              <Text className={styles.menuIcon}>📋</Text>
-              <Text className={styles.menuLabel}>签名记录</Text>
+              <Text className={styles.menuIcon}>🏥</Text>
+              <Text className={styles.menuLabel}>到院确认台账</Text>
             </View>
             <Text className={styles.menuArrow}>›</Text>
           </View>
+          <View className={styles.menuItem} onClick={gotoSignatureList}>
+            <View className={styles.menuLeft}>
+              <Text className={styles.menuIcon}>�</Text>
+              <Text className={styles.menuLabel}>签署档案</Text>
+            </View>
+            <Text className={styles.menuArrow}>›</Text>
+          </View>
+        </View>
+
+        <Text className={styles.sectionTitle}>功能</Text>
+        <View className={styles.menuCard}>
           <View className={styles.menuItem}>
             <View className={styles.menuLeft}>
               <Text className={styles.menuIcon}>💬</Text>

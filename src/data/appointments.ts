@@ -147,7 +147,14 @@ export const signatureRecords: SignatureRecord[] = [
     id: 's1',
     appointmentId: 'a4',
     treatmentName: '全瓷牙冠修复',
+    patientName: '张女士',
+    patientPhone: '138****6789',
+    doctorName: '陈静医生',
+    appointmentDate: '2026-06-28',
+    appointmentTime: '15:30',
     signedAt: '2026-06-20 15:45',
-    imageUrl: ''
+    imageUrl: '',
+    imageBase64: '',
+    frontDeskNote: '患者有高血压病史，已告知医生；术中若有不适请及时告知；已口头强调术后24小时避免用患侧咀嚼。'
   }
 ]

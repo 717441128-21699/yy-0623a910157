@@ -122,6 +122,26 @@
   line-height: $line-height-normal;
 }
 
+.sheetNoteBlock {
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  background-color: #FFF9E6;
+  border-radius: $radius-md;
+}
+
+.sheetNoteLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: #B07800;
+  margin-bottom: 8rpx;
+}
+
+.sheetNoteText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
 .sheetSignatureBlock {
   margin-top: $spacing-md;
   padding-top: $spacing-md;

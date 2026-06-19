@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { View, Text, Textarea, Image } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import classnames from 'classnames'
 import SignaturePad from '@/components/SignaturePad'
 import StatusBadge from '@/components/StatusBadge'
@@ -20,12 +20,18 @@ const ConfirmPage: React.FC = () => {
   const [verifiedPatient, setVerifiedPatient] = useState(false)
   const [verifiedTreatment, setVerifiedTreatment] = useState(false)
   const [verifiedQuestions, setVerifiedQuestions] = useState(false)
+  const [frontDeskNote, setFrontDeskNote] = useState('')
+  const [, setTick] = useState(0)
 
   const {
     getAppointment, getTreatment, getQuestionsByAppointment,
     addSignatureRecord, updateConsentStatus, answerQuestion,
-    signatureRecords
+    getSignatureRecord
   } = useConsentStore()
+
+  useDidShow(() => {
+    setTick((t) => t + 1)
+  })
 
   const params = useMemo(() => {
     const instance = Taro.getCurrentInstance()
@@ -55,8 +61,8 @@ const ConfirmPage: React.FC = () => {
   )
 
   const currentSignature = useMemo(
-    () => signatureRecords.find((r) => r.appointmentId === appointmentId),
-    [appointmentId, signatureRecords]
+    () => getSignatureRecord(appointmentId),
+    [appointmentId, getSignatureRecord]
   )
 
   const hasPendingQuestions = pendingQuestions.length > 0
@@ -65,6 +71,8 @@ const ConfirmPage: React.FC = () => {
 
   const allVerified = verifiedPatient && verifiedTreatment && verifiedQuestions
   const canSign = isRead && !hasPendingQuestions && allVerified
+
+  const signatureSrc = currentSignature?.imageBase64 || currentSignature?.imageUrl || ''
 
   const handleReplyChange = useCallback((qId: string, val: string) => {
     setReplyMap((prev) => ({ ...prev, [qId]: val }))
@@ -96,20 +104,28 @@ const ConfirmPage: React.FC = () => {
     setShowSignature(true)
   }, [canSign])
 
-  const handleSignatureComplete = useCallback((signatureData: string) => {
+  const handleSignatureComplete = useCallback((payload: { imageUrl: string; imageBase64: string }) => {
     if (!appointment) return
     const record = {
       id: `s${Date.now()}`,
       appointmentId: appointment.id,
       treatmentName: appointment.treatmentName,
+      patientName: PATIENT_NAME,
+      patientPhone: PATIENT_PHONE,
+      doctorName: appointment.doctorName,
+      appointmentDate: appointment.date,
+      appointmentTime: appointment.time,
       signedAt: new Date().toLocaleString('zh-CN'),
-      imageUrl: signatureData
+      imageUrl: payload.imageUrl,
+      imageBase64: payload.imageBase64 || payload.imageUrl,
+      frontDeskNote: frontDeskNote.trim()
     }
     addSignatureRecord(record)
     updateConsentStatus(appointment.id, 'signed')
+    setShowSignature(false)
     console.info('[ConfirmPage] signature completed', record.id)
     Taro.showToast({ title: '到院确认完成', icon: 'success' })
-  }, [appointment, addSignatureRecord, updateConsentStatus])
+  }, [appointment, addSignatureRecord, updateConsentStatus, frontDeskNote])
 
   if (!appointment || !treatment) {
     return (
@@ -151,11 +167,11 @@ const ConfirmPage: React.FC = () => {
           <View className={styles.confirmSheet}>
             <View className={styles.sheetRow}>
               <Text className={styles.sheetLabel}>患者姓名</Text>
-              <Text className={styles.sheetValue}>{PATIENT_NAME}</Text>
+              <Text className={styles.sheetValue}>{currentSignature.patientName || PATIENT_NAME}</Text>
             </View>
             <View className={styles.sheetRow}>
               <Text className={styles.sheetLabel}>联系电话</Text>
-              <Text className={styles.sheetValue}>{PATIENT_PHONE}</Text>
+              <Text className={styles.sheetValue}>{currentSignature.patientPhone || PATIENT_PHONE}</Text>
             </View>
             <View className={styles.sheetRow}>
               <Text className={styles.sheetLabel}>治疗项目</Text>
@@ -163,11 +179,11 @@ const ConfirmPage: React.FC = () => {
             </View>
             <View className={styles.sheetRow}>
               <Text className={styles.sheetLabel}>就诊医生</Text>
-              <Text className={styles.sheetValue}>{appointment.doctorName}</Text>
+              <Text className={styles.sheetValue}>{currentSignature.doctorName || appointment.doctorName}</Text>
             </View>
             <View className={styles.sheetRow}>
               <Text className={styles.sheetLabel}>预约时间</Text>
-              <Text className={styles.sheetValue}>{appointment.date} {appointment.time}</Text>
+              <Text className={styles.sheetValue}>{currentSignature.appointmentDate || appointment.date} {currentSignature.appointmentTime || appointment.time}</Text>
             </View>
             <View className={styles.sheetRow}>
               <Text className={styles.sheetLabel}>同意书阅读</Text>
@@ -197,13 +213,20 @@ const ConfirmPage: React.FC = () => {
               </View>
             )}
 
+            {currentSignature.frontDeskNote && (
+              <View className={styles.sheetNoteBlock}>
+                <Text className={styles.sheetNoteLabel}>前台备注</Text>
+                <Text className={styles.sheetNoteText}>{currentSignature.frontDeskNote}</Text>
+              </View>
+            )}
+
             <View className={styles.sheetSignatureBlock}>
               <Text className={styles.sheetLabel}>患者签名</Text>
-              {currentSignature.imageUrl ? (
+              {signatureSrc ? (
                 <View className={styles.sheetSignatureImageBox}>
                   <Image
                     className={styles.sheetSignatureImage}
-                    src={currentSignature.imageUrl}
+                    src={signatureSrc}
                     mode="aspectFit"
                   />
                 </View>
@@ -411,13 +434,24 @@ const ConfirmPage: React.FC = () => {
             </View>
           )}
 
-          {/* 核对完成：进入签名 */}
+          {/* 核对完成：进入签名 + 前台备注 */}
           {verifyStep === 'done' && !showSignature && (
             <View className={styles.verifyCard}>
               <View className={styles.verifyDone}>
                 <Text className={styles.verifyDoneIcon}>✅</Text>
                 <Text className={styles.verifyDoneTitle}>前台核对完成</Text>
                 <Text className={styles.verifyDoneSub}>请引导患者完成签名确认</Text>
+              </View>
+              <View className={styles.noteSection}>
+                <Text className={styles.noteLabel}>前台备注（可选）</Text>
+                <Textarea
+                  className={styles.noteInput}
+                  placeholder="记录患者当天特殊说明、已口头解释的重点等..."
+                  placeholderClass={styles.replyPlaceholder}
+                  value={frontDeskNote}
+                  onInput={(e) => setFrontDeskNote(e.detail.value)}
+                  maxlength={300}
+                />
               </View>
             </View>
           )}

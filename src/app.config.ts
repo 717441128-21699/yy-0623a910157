@@ -7,7 +7,8 @@ export default defineAppConfig({
     'pages/question/index',
     'pages/confirm/index',
     'pages/signature-list/index',
-    'pages/signature-detail/index'
+    'pages/signature-detail/index',
+    'pages/front-desk/index'
   ],
   window: {
     backgroundTextStyle: 'light',
