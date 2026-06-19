@@ -3,14 +3,17 @@
 .card {
   background-color: $color-bg-card;
   border-radius: $radius-lg;
-  padding: $spacing-lg;
   margin-bottom: $spacing-md;
   box-shadow: $shadow-card;
+  overflow: hidden;
+}
+
+.mainArea {
+  padding: $spacing-lg;
   transition: all $transition-base;
 
   &:active {
     opacity: 0.92;
-    transform: scale(0.98);
   }
 }
 
@@ -73,4 +76,24 @@
   font-size: $font-size-sm;
   color: $color-primary;
   font-weight: $font-weight-medium;
+}
+
+.confirmEntry {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border: none;
+  border-radius: 0;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.confirmEntryText {
+  font-size: $font-size-md;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
 }

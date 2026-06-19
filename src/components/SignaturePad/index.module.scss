@@ -21,9 +21,16 @@
 }
 
 .clearBtn {
-  padding: 8rpx 20rpx;
-  border-radius: $radius-round;
+  @include button-reset;
+  height: 56rpx;
+  padding: 0 24rpx;
   background-color: $color-bg-hover;
+  border-radius: $radius-round;
+  border: none;
+
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .clearBtnText {
@@ -32,16 +39,32 @@
   white-space: nowrap;
 }
 
-.pad {
+.canvasWrap {
+  position: relative;
   width: 100%;
-  height: 300rpx;
+  height: 320rpx;
+  margin-bottom: $spacing-lg;
   border: 2rpx dashed $color-border;
   border-radius: $radius-md;
+  background-color: #FAFBFC;
+  overflow: hidden;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.placeholderWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FAFBFC;
-  margin-bottom: $spacing-lg;
+  pointer-events: none;
 }
 
 .placeholder {

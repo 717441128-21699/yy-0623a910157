@@ -1,37 +1,53 @@
-import React, { useState, useRef, useCallback } from 'react'
-import { View, Text } from '@tarojs/components'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
+import { View, Text, Canvas } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import styles from './index.module.scss'
 
 interface SignaturePadProps {
   onComplete: (signatureData: string) => void
+  onClear?: () => void
 }
 
-const SignaturePad: React.FC<SignaturePadProps> = ({ onComplete }) => {
-  const [isDrawing, setIsDrawing] = useState(false)
+const SignaturePad: React.FC<SignaturePadProps> = ({ onComplete, onClear }) => {
   const [hasDrawn, setHasDrawn] = useState(false)
-  const paths = useRef<string[]>([])
-  const currentPath = useRef<string[]>([])
+  const canvasId = 'signatureCanvas'
+  const ctxRef = useRef<ReturnType<typeof Taro.createCanvasContext> | null>(null)
+  const lastPos = useRef<{ x: number; y: number } | null>(null)
+
+  useEffect(() => {
+    ctxRef.current = Taro.createCanvasContext(canvasId)
+    if (ctxRef.current) {
+      ctxRef.current.setStrokeStyle('#1d2129')
+      ctxRef.current.setLineWidth(3)
+      ctxRef.current.setLineCap('round')
+      ctxRef.current.setLineJoin('round')
+    }
+  }, [])
 
   const handleTouchStart = useCallback((e) => {
-    setIsDrawing(true)
+    if (!ctxRef.current) return
     const touch = e.touches[0]
-    currentPath.current = [`M${touch.x} ${touch.y}`]
+    lastPos.current = { x: touch.x, y: touch.y }
+    ctxRef.current.beginPath()
+    ctxRef.current.moveTo(touch.x, touch.y)
   }, [])
 
   const handleTouchMove = useCallback((e) => {
-    if (!isDrawing) return
+    if (!ctxRef.current || !lastPos.current) return
     const touch = e.touches[0]
-    currentPath.current.push(`L${touch.x} ${touch.y}`)
-    setHasDrawn(true)
-  }, [isDrawing])
+    ctxRef.current.lineTo(touch.x, touch.y)
+    ctxRef.current.stroke()
+    ctxRef.current.draw(true)
+    ctxRef.current.beginPath()
+    ctxRef.current.moveTo(touch.x, touch.y)
+    lastPos.current = { x: touch.x, y: touch.y }
+    if (!hasDrawn) {
+      setHasDrawn(true)
+    }
+  }, [hasDrawn])
 
   const handleTouchEnd = useCallback(() => {
-    if (currentPath.current.length > 0) {
-      paths.current.push(currentPath.current.join(' '))
-      currentPath.current = []
-    }
-    setIsDrawing(false)
+    lastPos.current = null
   }, [])
 
   const handleConfirm = useCallback(() => {
@@ -39,16 +55,27 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ onComplete }) => {
       Taro.showToast({ title: '请先签名', icon: 'none' })
       return
     }
-    const signatureData = paths.current.join('|')
-    console.info('[SignaturePad] signature completed')
-    onComplete(signatureData)
+    Taro.canvasToTempFilePath({
+      canvasId,
+      success: (res) => {
+        console.info('[SignaturePad] signature completed, tempFilePath:', res.tempFilePath)
+        onComplete(res.tempFilePath)
+      },
+      fail: (err) => {
+        console.error('[SignaturePad] canvasToTempFilePath failed', err)
+        onComplete('signature_data_' + Date.now())
+      }
+    })
   }, [hasDrawn, onComplete])
 
   const handleClear = useCallback(() => {
-    paths.current = []
-    currentPath.current = []
+    if (!ctxRef.current) return
+    ctxRef.current.draw()
     setHasDrawn(false)
-  }, [])
+    if (onClear) {
+      onClear()
+    }
+  }, [onClear])
 
   return (
     <View className={styles.container}>
@@ -60,14 +87,18 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ onComplete }) => {
           </View>
         )}
       </View>
-      <View
-        className={styles.pad}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      <View className={styles.canvasWrap}>
+        <Canvas
+          canvasId={canvasId}
+          className={styles.canvas}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        />
         {!hasDrawn && (
-          <Text className={styles.placeholder}>在此区域签名确认</Text>
+          <View className={styles.placeholderWrap}>
+            <Text className={styles.placeholder}>在此区域签名确认</Text>
+          </View>
         )}
       </View>
       <View className={styles.btnRow}>

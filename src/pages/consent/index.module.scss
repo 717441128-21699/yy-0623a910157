@@ -171,3 +171,36 @@
   font-weight: $font-weight-semibold;
   white-space: nowrap;
 }
+
+.confirmedRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.confirmedText {
+  font-size: $font-size-md;
+  color: $color-done-text;
+  font-weight: $font-weight-medium;
+}
+
+.gotoConfirmBtn {
+  @include button-reset;
+  height: $button-height-md;
+  padding: 0 $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  border: none;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.gotoConfirmBtnText {
+  font-size: $font-size-md;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}

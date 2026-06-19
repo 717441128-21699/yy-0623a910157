@@ -8,7 +8,6 @@ import { useConsentStore } from '@/store/useConsentStore'
 import styles from './index.module.scss'
 
 const ConsentPage: React.FC = () => {
-  const [agreed, setAgreed] = useState(false)
   const { getAppointment, getTreatment, updateConsentStatus } = useConsentStore()
 
   const params = useMemo(() => {
@@ -26,6 +25,9 @@ const ConsentPage: React.FC = () => {
     [appointment, getTreatment]
   )
 
+  const isConfirmed = appointment?.consentStatus === 'confirmed' || appointment?.consentStatus === 'signed'
+  const [agreed, setAgreed] = useState(isConfirmed)
+
   const handleQuestion = useCallback(() => {
     if (!appointment) return
     Taro.navigateTo({ url: `/pages/question/index?appointmentId=${appointment.id}` })
@@ -37,9 +39,14 @@ const ConsentPage: React.FC = () => {
     console.info('[ConsentPage] consent confirmed', appointment.id)
     Taro.showToast({ title: '已确认阅读', icon: 'success' })
     setTimeout(() => {
-      Taro.navigateBack()
-    }, 1500)
+      Taro.redirectTo({ url: `/pages/confirm/index?id=${appointment.id}` })
+    }, 1200)
   }, [agreed, appointment, updateConsentStatus])
+
+  const handleGoConfirm = useCallback(() => {
+    if (!appointment) return
+    Taro.navigateTo({ url: `/pages/confirm/index?id=${appointment.id}` })
+  }, [appointment])
 
   if (!appointment || !treatment) {
     return (
@@ -99,25 +106,36 @@ const ConsentPage: React.FC = () => {
         </View>
       </View>
 
-      <View className={styles.bottomBar}>
-        <View className={styles.checkboxRow} onClick={() => setAgreed(!agreed)}>
-          <View className={classnames(styles.checkbox, agreed && styles.checkboxChecked)}>
-            {agreed && <Text className={styles.checkMark}>✓</Text>}
-          </View>
-          <Text className={styles.checkboxLabel}>我已阅读并理解以上治疗说明</Text>
-        </View>
-        <View className={styles.btnRow}>
-          <View className={styles.questionBtn} onClick={handleQuestion}>
-            <Text className={styles.questionBtnText}>我有疑问</Text>
-          </View>
-          <View
-            className={classnames(styles.confirmBtn, agreed && styles.confirmBtnActive)}
-            onClick={handleConfirm}
-          >
-            <Text className={styles.confirmBtnText}>确认阅读</Text>
+      {isConfirmed ? (
+        <View className={styles.bottomBar}>
+          <View className={styles.confirmedRow}>
+            <Text className={styles.confirmedText}>✅ 已确认阅读</Text>
+            <View className={styles.gotoConfirmBtn} onClick={handleGoConfirm}>
+              <Text className={styles.gotoConfirmBtnText}>前往到院确认</Text>
+            </View>
           </View>
         </View>
-      </View>
+      ) : (
+        <View className={styles.bottomBar}>
+          <View className={styles.checkboxRow} onClick={() => setAgreed(!agreed)}>
+            <View className={classnames(styles.checkbox, agreed && styles.checkboxChecked)}>
+              {agreed && <Text className={styles.checkMark}>✓</Text>}
+            </View>
+            <Text className={styles.checkboxLabel}>我已阅读并理解以上治疗说明</Text>
+          </View>
+          <View className={styles.btnRow}>
+            <View className={styles.questionBtn} onClick={handleQuestion}>
+              <Text className={styles.questionBtnText}>我有疑问</Text>
+            </View>
+            <View
+              className={classnames(styles.confirmBtn, agreed && styles.confirmBtnActive)}
+              onClick={handleConfirm}
+            >
+              <Text className={styles.confirmBtnText}>确认阅读</Text>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   )
 }

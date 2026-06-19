@@ -18,8 +18,12 @@ const HomePage: React.FC = () => {
     [appointments]
   )
 
-  const handleTap = (id: string) => {
+  const handleTapConsent = (id: string) => {
     Taro.navigateTo({ url: `/pages/consent/index?id=${id}` })
+  }
+
+  const handleTapConfirm = (id: string) => {
+    Taro.navigateTo({ url: `/pages/confirm/index?id=${id}` })
   }
 
   return (
@@ -48,7 +52,12 @@ const HomePage: React.FC = () => {
 
       {appointments.length > 0 ? (
         appointments.map((apt) => (
-          <AppointmentCard key={apt.id} appointment={apt} onTap={handleTap} />
+          <AppointmentCard
+            key={apt.id}
+            appointment={apt}
+            onTapConsent={handleTapConsent}
+            onTapConfirm={handleTapConfirm}
+          />
         ))
       ) : (
         <View className={styles.emptyTip}>
